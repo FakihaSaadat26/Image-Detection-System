@@ -5,6 +5,7 @@ from models import get_db, Camera, Detections
 from pydantic import BaseModel
 from typing import List
 
+
 # Pydantic response models
 class CameraResponse(BaseModel):
     id: int
