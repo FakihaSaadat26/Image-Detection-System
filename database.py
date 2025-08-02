@@ -3,16 +3,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from decouple import config
 
-
-# Database connection
 DATABASE_URL = config("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
+SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 Base = declarative_base()
 
-# Dependency to get the database session
+# Dependency
 def get_db():
     db = SessionLocal()
     try:
