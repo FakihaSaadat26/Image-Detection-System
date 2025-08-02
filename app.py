@@ -43,6 +43,23 @@ def get_camera_by_id(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Camera not found for this id")
     return camera
 
+@router.get("/camera/{id}/detections", response_model=List[DetectionResponse])
+def get_detections_by_camera_id(id: int, db: Session = Depends(get_db)):
+    detections = db.query(Detections).filter(Detections.cam_id == id).all()
+    
+    # Convert timestamps to string (e.g., "17:43:57")
+    response = []
+    for det in detections:
+        det_dict = {
+            "id": det.id,
+            "timestamp": det.timestamp.strftime("%H:%M:%S"),  # convert time to string
+            "image_path": det.image_path,
+            "cam_id": det.cam_id
+        }
+        response.append(det_dict)
+    
+    return response
+
 @router.get("/detections", response_model=List[DetectionResponse])
 def get_all_detections(db: Session = Depends(get_db)):
     return db.query(Detections).all()
